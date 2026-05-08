@@ -6,6 +6,11 @@ data/processed/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 
+
+# Nhưng vẫn giữ file placeholder
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
 # Không push file lớn
 *.zip
 
@@ -22,3 +27,4 @@ __pycache__/
 
 *.pkl
 *.joblib
+.idea/
