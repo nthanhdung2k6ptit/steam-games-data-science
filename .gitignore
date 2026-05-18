@@ -28,3 +28,5 @@ __pycache__/
 *.pkl
 *.joblib
 .idea/
+
+.env
