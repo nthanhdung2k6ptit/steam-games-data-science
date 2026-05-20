@@ -1,7 +1,6 @@
 
 import os
 from pathlib import Path
-
 import pandas as pd
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
@@ -16,11 +15,6 @@ DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_HOST = os.getenv("DB_HOST", "localhost")
 DB_PORT = os.getenv("DB_PORT", "3306")
 DB_NAME = os.getenv("DB_NAME")
-
-
-# =========================
-# CREATE ENGINE
-# =========================
 
 engine = create_engine(
     f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}?charset=utf8mb4"
@@ -40,11 +34,6 @@ csv_files = {
     "application_platforms": "application_platforms.csv",
     "application_publishers": "application_publishers.csv",
 }
-
-
-# =========================
-# IMPORT FUNCTION
-# =========================
 
 def import_csv_to_mysql():
     for table_name, file_name in csv_files.items():
