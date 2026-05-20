@@ -1,13 +1,12 @@
 import joblib
 import os
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
 
-def train_classification_model(X_train, y_train):
-    model = RandomForestClassifier(n_estimators=100, random_state=42)
+def train_classification_model(X_train, y_train, model_type = 'rfc'):
+    if model_type == 'rfc':
+        model = RandomForestClassifier(n_estimators=100, random_state=67, class_weight='balanced')
+    else:
+        model = LogisticRegression(max_iter=1000, class_weight='balanced')
     model.fit(X_train, y_train)
     return model
-
-def save_model(model, filepath):
-    os.makedirs(os.path.dirname(filepath), exist_ok=True)
-    joblib.dump(model, filepath)
-    print(f"Classification model saved to {filepath}")
