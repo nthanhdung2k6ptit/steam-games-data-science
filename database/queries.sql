@@ -171,3 +171,123 @@ JOIN application_genres ag
 JOIN genres g
     ON ag.genre_id = g.id
 LIMIT 20;
+
+
+DESCRIBE application_publishers;
+DESCRIBE publishers;
+
+-- ====================================
+
+-- 18. TẠO VIEW gom genres
+CREATE OR REPLACE VIEW vw_app_genres AS
+SELECT ag.appid,
+    GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ', ') AS genres
+FROM application_genres ag
+JOIN genres g
+    ON ag.genre_id = g.id
+GROUP BY ag.appid;
+
+-- 19. Tạo VIEW gom developers
+CREATE OR REPLACE VIEW vw_app_developers AS
+SELECT ad.appid,
+    GROUP_CONCAT(DISTINCT d.name ORDER BY d.name SEPARATOR', ') AS developers
+FROM application_developers ad
+JOIN developers d
+    ON ad.developer_id = d.id
+GROUP BY ad.appid;
+
+-- 20. Tạo VIEW gom publishers
+CREATE OR REPLACE VIEW vw_app_publishers AS
+SELECT
+    ap.appid,
+    GROUP_CONCAT(DISTINCT p.name ORDER BY p.name SEPARATOR ', ') AS publishers
+FROM application_publishers ap
+JOIN publishers p
+    ON ap.publisher_id = p.id
+GROUP BY ap.appid;
+
+-- 21. Tạo VIEW tổng hợp thông tin game + genres + developers + publishers
+CREATE OR REPLACE VIEW vw_games_full_metadata AS
+SELECT a.appid,
+    a.name AS game_name,
+    a.type,
+    a.is_free,
+    a.required_age,
+    a.release_date,
+    a.metacritic_score,
+    a.recommendations_total,
+    a.mat_initial_price,
+    a.mat_final_price,
+    a.mat_discount_percent,
+    a.mat_currency,
+    a.mat_achievement_count,
+    a.mat_supports_windows,
+    a.mat_supports_mac,
+    a.mat_supports_linux,
+    a.short_description,
+    a.supported_languages,
+
+    g.genres,
+    d.developers,
+    p.publishers
+FROM applications a
+LEFT JOIN vw_app_genres g
+    ON a.appid = g.appid
+LEFT JOIN vw_app_developers d
+    ON a.appid = d.appid
+LEFT JOIN vw_app_publishers p
+    ON a.appid = p.appid
+WHERE a.name IS NOT NULL;
+
+
+-- 22. VIEW recommendation
+CREATE OR REPLACE VIEW vw_recommendation_full AS
+SELECT a.appid,
+    a.name,
+    a.type,
+    a.short_description,
+
+    g.genres,
+    d.developers,
+    p.publishers
+FROM applications a
+LEFT JOIN vw_app_genres g
+    ON a.appid = g.appid
+LEFT JOIN vw_app_developers d
+    ON a.appid = d.appid
+LEFT JOIN vw_app_publishers p
+    ON a.appid = p.appid
+WHERE a.name IS NOT NULL
+  AND a.short_description IS NOT NULL;
+
+
+-- 23. Check VIEW tổng hợp
+SELECT
+    appid,
+    game_name,
+    genres,
+    developers,
+    publishers
+FROM vw_games_full_metadata
+LIMIT 9;
+
+SELECT * FROM vw_games_full_metadata LIMIT 9;
+
+-- 24. Tạo INDEX CREATE INDEX idx_application_genres_appid
+CREATE INDEX idx_application_genres_appid
+ON application_genres(appid);
+
+CREATE INDEX idx_application_genres_genre_id
+ON application_genres(genre_id);
+
+CREATE INDEX idx_application_developers_appid
+ON application_developers(appid);
+
+CREATE INDEX idx_application_developers_developer_id
+ON application_developers(developer_id);
+
+CREATE INDEX idx_application_publishers_appid
+ON application_publishers(appid);
+
+CREATE INDEX idx_application_publishers_publisher_id
+ON application_publishers(publisher_id);
