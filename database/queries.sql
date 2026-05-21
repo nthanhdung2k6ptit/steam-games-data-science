@@ -75,7 +75,7 @@ SELECT
 FROM applications;
 
    
---8. Tính tỷ lệ missing của một số cột quan trọng
+-- 8. Tính tỷ lệ missing của một số cột quan trọng
 SELECT
     ROUND (SUM(CASE WHEN metacritic_score IS NULL THEN 1 ELSE 0 END) * 100.0 /COUNT(*), 2) AS missing_metarcritic_percent,
     ROUND (SUM(CASE WHEN recommendations_total IS NULL THEN 1 ELSE 0 END) * 100.0 /COUNT(*), 2) AS missing_recommendations_percent,
