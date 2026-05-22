@@ -1,5 +1,3 @@
-import math
-
 def MSE(N, actual, predicted, j):
         tong = 0
         for i in range(j, N):
@@ -39,3 +37,17 @@ def MAE(N, actual, predict, j):
 
     result = tong / N
     return result
+
+def Precision(tp, fp):
+    return tp/(tp+fp)
+
+def Recall(tp, fn):
+    return tp/(tp+fn)
+
+def F1Score(P, R):
+    return 2 * ((P*R) / (P+R))
+
+def Accuracy(N, dung):  
+    if N == 0:
+        return 0
+    return dung / N
