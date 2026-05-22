@@ -8,11 +8,8 @@ class LinearRegressionRaw:
     def __init__(self):
         self.theta = None 
         
-    def fit(self, X, y):       
-        # Chèn thêm một cột toàn số 1 vào ma trận X để tính hệ số chặn Bias
-        X_b = np.c_[np.ones((X.shape[0], 1)), X]
-               
-        # Công thức chuẩn tắc OLS nguyên bản: theta = (X^T * X)^(-1) * X^T * y
+    def fit(self, X, y):               
+        X_b = np.c_[np.ones((X.shape[0], 1)), X]                    
         X_transpose = X_b.T
         self.theta = np.linalg.inv(X_transpose.dot(X_b)).dot(X_transpose).dot(y)
 
@@ -32,31 +29,26 @@ if __name__ == "__main__":
         X = pd.read_csv(pca_data_path).values.astype(float)
         y = pd.read_csv(clean_data_path)['mat_final_price'].values.astype(float)
         
-        # Xáo trộn dữ liệu đồng bộ bằng Seed 42
         np.random.seed(69)
         indices = np.arange(X.shape[0])
         np.random.shuffle(indices)
         X, y = X[indices], y[indices]
         
-        # Chia tách tập Train/Test theo tỷ lệ 80/20 hình thức thủ công
         split_idx = int(len(X) * 0.8)
         X_train, X_test = X[:split_idx], X[split_idx:]
         y_train, y_test = y[:split_idx], y[split_idx:]
         
         print(f"Kích thước nạp vào - Train: {X_train.shape}, Test: {X_test.shape}")
         
-        # ĐO THỜI GIAN HUẤN LUYỆN ĐẠI SỐ
         t0 = time.time()
         model = LinearRegressionRaw()
         model.fit(X_train, y_train)
         train_time = time.time() - t0
-        
-        # ĐO THỜI GIAN DỰ ĐOÁN
+
         t1 = time.time()
         y_pred = model.predict(X_test)
         pred_time = time.time() - t1
-        
-        # Tính toán các chỉ số đánh giá bằng file metrics.py tự chế
+
         N = len(y_test)
         mean_y_test = np.full(N, np.mean(y_test))
         rmse_val = RMSE(N, y_test, y_pred, 0)
