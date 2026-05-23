@@ -1,3 +1,6 @@
+import math
+
+
 def MSE(N, actual, predicted, j):
         tong = 0
         for i in range(j, N):
@@ -51,3 +54,18 @@ def Accuracy(N, dung):
     if N == 0:
         return 0
     return dung / N
+
+
+def evaluate_regression_raw(N,y_true, y_pred,mean,j, model_name="Model"):    
+    rmse = math.sqrt(MSE(N,y_true,y_pred,j))
+    mae = MAE(N,y_true,y_pred,j)
+    r2 = R2(N,y_true,y_pred,mean,j)
+    
+    print(f"--- {model_name} Regression Metrics ---")
+    print(f"RMSE: {rmse:.4f}")
+    print(f"MAE:  {mae:.4f}")
+    print(f"R2:   {r2:.4f}")
+    
+    return {"rmse": rmse, "mae": mae, "r2": r2}
+
+    
