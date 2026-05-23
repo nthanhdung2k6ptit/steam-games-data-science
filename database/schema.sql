@@ -27,6 +27,7 @@ GROUP BY id
 HAVING COUNT(*) > 1
 LIMIT 10;
 
+
 -- Check duplicate developers
 SELECT id, COUNT(*) AS total
 FROM developers
