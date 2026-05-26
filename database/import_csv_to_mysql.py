@@ -38,15 +38,12 @@ csv_files = {
 def import_csv_to_mysql():
     for table_name, file_name in csv_files.items():
         file_path = RAW_DATA_DIR / file_name
-
         if not file_path.exists():
             print(f"SKIP: {file_name} not found")
             continue
-
         print(f"Importing {file_name} -> table `{table_name}`")
 
         df = pd.read_csv(file_path, low_memory=False)
-
         df.to_sql(
             name=table_name,
             con=engine,
@@ -54,9 +51,7 @@ def import_csv_to_mysql():
             index=False,
             chunksize=5000
         )
-
         print(f"DONE: {table_name}, shape={df.shape}")
-
     print("All available CSV files imported successfully.")
 
 
