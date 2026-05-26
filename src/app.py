@@ -99,7 +99,7 @@ with col2:
                 
                 pred_price_usd = max(0, pred_price_cents / 100)
                 
-                st.success("✅ Đã thẩm định thành công!")
+                st.success("Đã thẩm định thành công!")
                 res_col1, res_col2 = st.columns(2)
                 with res_col1:
                     st.metric(label="Giá bán đề xuất", value=f"${pred_price_usd:.2f}")
@@ -107,7 +107,7 @@ with col2:
                     st.metric(label="Phân khúc thị trường", value=str(pred_category).upper())
                     
             except Exception as e:
-                st.error(f"⚠️ Lỗi trong quá trình tính toán: {e}")
+                st.error(f"Lỗi trong quá trình tính toán: {e}")
 
     else:
-        st.info("👈 Vui lòng cấu hình thông số tựa game bên trái và bấm nút Thẩm định.")
+        st.info("Vui lòng cấu hình thông số tựa game bên trái và bấm nút Thẩm định.")
